@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>sipslive.tv</title>
+    <link href='http://fonts.googleapis.com/css?family=Monoton|Press+Start+2P' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+  </head>
+  <body>
+    <div class="holder">
+      <h1>is sips live?</h1>
+      <div class="content loading"><span class="text">checking for you bud, hold tight</span></div>
+      <div class="footer">
+        <a href="https://www.youtube.com/sips">sips main channel</a> |
+        <a href="https://www.youtube.com/channel/UCJW9YScngZyevv40qOS5QYQ">sips catchup channel</a> |
+        <a href="https://twitch.tv/sips_">sips twitch channel</a> |
+        <a href="https://reddit.com/r/sips">/r/sips</a>
+      </div>
+      <!--<div class="chat"><iframe src="http://www.twitch.tv/sips_/chat?popout=" frameborder="0" scrolling="no" height="724" width="350"></iframe></div>-->
+    </div>
+
+  <script>
+    var $content = document.querySelector('.content');
+    var twitchUrl = 'https://api.twitch.tv/kraken/streams/sips_';
+    var twitchEmbed = '<iframe src="http://www.twitch.tv/sips_/embed" frameborder="0" scrolling="no" height="720" width="1280"></iframe>' +
+        '<a href="http://www.twitch.tv/sips?tt_medium=live_embed&tt_content=text_link" class="watch">Watch live video from Sips on www.twitch.tv</a>';
+
+    function getJSON (url, callback) {
+      var $head = document.getElementsByTagName('head')[0];
+      var script = document.createElement('script');
+
+      window.twitchCallback = callback;
+
+      $head.appendChild(script);
+      script.src = url + '?callback=twitchCallback';
+    }
+
+    function notLive () {
+      $content.classList.remove('loading');
+      $content.querySelector('.text').innerHTML = 'sorry bud, he\'s not live.<br />' +
+      'take a look at his <a href="https://www.youtube.com/channel/UCJW9YScngZyevv40qOS5QYQ">youtube channel</a> to catch up';
+    }
+
+    function live () {
+      $content.classList.remove('loading');
+      $content.innerHTML = twitchEmbed;
+    }
+
+    // Show the loading for a little bit
+    setTimeout(function () {
+      getJSON(twitchUrl, function (data) {
+        console.log(data);
+        if (data.stream) {
+          live();
+        } else {
+          notLive();
+        }
+      });
+    }, 1000);
+  </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-36801759-5', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+  </body>
+</html>
